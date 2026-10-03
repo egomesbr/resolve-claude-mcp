@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Tech4Work — Intro 10s</title>
+  <script src="assets/gsap.min.js"></script>
+  <style>
+    :root { --bg:#03020A; --cyan:#22D3EE; --pink:#F43F8E; --white:#FFFFFF; }
+    html, body { margin:0; background:var(--bg); }
+    #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--bg);
+            font-family:"Inter","Helvetica Neue",Arial,sans-serif; color:var(--white); }
+    .layer { position:absolute; inset:0; }
+    #bg { width:1920px; height:1080px; object-fit:cover; }
+    #shade { background:radial-gradient(ellipse at center, rgba(3,2,10,.25) 0%, rgba(3,2,10,.7) 100%); }
+    #stage { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:36px; }
+    #logo { width:150px; height:auto; opacity:0; }
+    #title { margin:0; font-size:150px; font-weight:800; letter-spacing:.12em; opacity:0;
+             text-shadow:0 0 60px rgba(34,211,238,.45); }
+    #title span { color:var(--cyan); }
+    #line { width:0; height:4px; border-radius:2px; background:linear-gradient(90deg,var(--cyan),var(--pink)); }
+    #tagline { margin:0; font-size:46px; font-weight:400; letter-spacing:.04em; opacity:0; color:#D8E6EE; }
+  </style>
+</head>
+<body>
+  <div id="root" data-composition-id="root" data-width="1920" data-height="1080" data-start="0" data-duration="10">
+    <!-- Background video (muted loop-free 10s clip) -->
+    <video id="bg" class="layer clip" src="assets/bg.mp4" data-start="0" data-duration="10" data-track-index="0" muted playsinline></video>
+    <div id="shade" class="layer"></div>
+
+    <div id="stage" class="layer">
+      <img id="logo" src="assets/logo-cubo.png" alt="" />
+      <h1 id="title">TECH<span>4</span>WORK</h1>
+      <div id="line"></div>
+      <p id="tagline">Automação que sustenta o crescimento</p>
+    </div>
+
+    <!-- Subtle background music: 2s fade in / 2s fade out, low gain -->
+    <audio id="music" src="assets/music.m4a" data-start="0" data-duration="10" data-track-index="1"
+           data-volume="0.35" data-fade-in="2" data-fade-out="2"></audio>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#logo",   { opacity:0, scale:.8, y:20 }, { opacity:1, scale:1, y:0, duration:1.2, ease:"power2.out" }, 0.6)
+      .fromTo("#title",  { opacity:0, y:30 },           { opacity:1, y:0, duration:1.8, ease:"power2.out" }, 1.4)  // fade-in do título
+      .fromTo("#line",   { width:0 },                   { width:520, duration:1.2, ease:"power3.inOut" }, 3.0)
+      .fromTo("#tagline",{ opacity:0, y:16 },           { opacity:1, y:0, duration:1.2, ease:"power2.out" }, 3.6)
+      .to("#stage",      { opacity:0, duration:1.0, ease:"power1.in" }, 9.0);  // saída suave
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = tl;
+  </script>
+</body>
+</html>
