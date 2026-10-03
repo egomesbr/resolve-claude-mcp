@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "IntroBold"; src: url("assets/title.ttf"); font-weight: 700; }
+      @font-face { font-family: "IntroReg"; src: url("assets/sub.ttf"); font-weight: 400; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #070a1a; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+      #bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      /* Dark scrim keeps the title legible over the moving background */
+      #scrim { position: absolute; inset: 0;
+        background: radial-gradient(ellipse at center, rgba(7,10,26,0.25) 0%, rgba(7,10,26,0.65) 100%); }
+      #stack { position: absolute; inset: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 28px; }
+      #title { font-family: "IntroBold", sans-serif; font-weight: 700; color: #f5f7ff;
+        font-size: 132px; letter-spacing: -0.03em; text-shadow: 0 6px 40px rgba(0,0,0,0.45); }
+      #rule { width: 160px; height: 4px; border-radius: 2px;
+        background: linear-gradient(90deg, #5eead4, #818cf8); }
+      #tagline { font-family: "IntroReg", sans-serif; font-weight: 400; color: #c7d2fe;
+        font-size: 44px; letter-spacing: 0.02em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <video id="bg" class="clip" src="assets/bg.mp4" muted playsinline
+        data-start="0" data-duration="10" data-track-index="0"></video>
+      <div id="scrim" class="clip" data-start="0" data-duration="10" data-track-index="1"></div>
+      <div id="stack">
+        <h1 id="title">Resolve Claude MCP</h1>
+        <div id="rule"></div>
+        <p id="tagline">Edit, grade and composite in DaVinci Resolve — just by asking.</p>
+      </div>
+      <audio id="music" src="assets/music.mp3" data-start="0" data-duration="10"
+        data-track-index="3" data-volume="0.35"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Title: fade-in with a gentle rise, held, then a soft fade-out at the end
+      tl.fromTo("#title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" }, 0.8);
+      tl.fromTo("#rule", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1.0, ease: "power3.out" }, 2.2);
+      tl.fromTo("#tagline", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 2.8);
+      tl.to("#stack", { opacity: 0, duration: 1.0, ease: "power1.in" }, 9.0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
